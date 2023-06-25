@@ -13,6 +13,7 @@ class _NewExpenseState extends State<NewExpense> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
   DateTime? _selectedDate;
+  Category _selectedCategory = Category.leisure;
 
   void _presentDatePicker() async {
     final now = DateTime.now();
@@ -26,6 +27,32 @@ class _NewExpenseState extends State<NewExpense> {
     setState(() {
       _selectedDate = pickedDate;
     });
+  }
+
+  void _submitExpenseData() {
+    final enteredAmount = double.tryParse(_amountController.text);
+    final amountIsInvalid = enteredAmount == null || enteredAmount <= 0.0;
+    if (_titleController.text.trim().isEmpty ||
+        amountIsInvalid ||
+        _selectedDate == null) {
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Invalid input'),
+          content: const Text(
+              'Please make sure a valid title, amount, date, and category was entered'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(ctx);
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
   }
 
   @override
@@ -60,29 +87,42 @@ class _NewExpenseState extends State<NewExpense> {
               label: Text('Amount'),
             ),
           ),
-          Container(
-            margin: EdgeInsets.symmetric(
-              vertical: 10,
-            ),
-            child: OutlinedButton(
-              onPressed: _presentDatePicker,
-              child: Text(_selectedDate == null
-                  ? 'Date'
-                  : formatter.format(_selectedDate!)),
-            ),
+          const SizedBox(height: 10),
+          OutlinedButton(
+            onPressed: _presentDatePicker,
+            child: Text(_selectedDate == null
+                ? 'Date'
+                : formatter.format(_selectedDate!)),
           ),
-          Spacer(),
+          DropdownButton(
+              value: _selectedCategory,
+              items: Category.values
+                  .map(
+                    (category) => DropdownMenuItem(
+                      value: category,
+                      child: Text(
+                        category.name.toUpperCase(),
+                      ),
+                    ),
+                  )
+                  .toList(),
+              onChanged: (value) {
+                if (value == null) {
+                  return;
+                }
+                setState(() {
+                  _selectedCategory = value;
+                });
+              }),
+          const Spacer(),
           Container(
-            margin: EdgeInsets.fromLTRB(0, 5, 0, 15),
+            margin: const EdgeInsets.fromLTRB(0, 5, 0, 15),
             child: Column(
               // mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 FilledButton(
-                  onPressed: () {
-                    print(_titleController.text);
-                    print('\$${_amountController.text}');
-                  },
+                  onPressed: _submitExpenseData,
                   child: const Text('Save Expense'),
                 ),
                 TextButton(

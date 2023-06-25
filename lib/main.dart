@@ -7,6 +7,7 @@ void main() {
     MaterialApp(
       theme: ThemeData(useMaterial3: true),
       home: Expenses(),
+      debugShowCheckedModeBanner: false,
     ),
   );
 }
