@@ -3,12 +3,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test_3/widgets/expenses.dart';
 
 var kColorScheme = ColorScheme.fromSeed(
-  seedColor: Color.fromARGB(255, 0, 122, 255),
+  seedColor: const Color.fromARGB(255, 0, 122, 255),
+);
+
+var kDarkColorScheme = ColorScheme.fromSeed(
+  brightness: Brightness.dark,
+  seedColor: Color.fromARGB(255, 32, 94, 160),
 );
 
 void main() {
   runApp(
     MaterialApp(
+      darkTheme: ThemeData.dark().copyWith(
+        useMaterial3: true,
+        colorScheme: kDarkColorScheme,
+        cardTheme: const CardTheme().copyWith(
+          color: kDarkColorScheme.secondaryContainer,
+          margin: const EdgeInsets.symmetric(
+            horizontal: 14,
+            vertical: 6,
+          ),
+        ),
+        filledButtonTheme: FilledButtonThemeData(
+          style: FilledButton.styleFrom(
+            backgroundColor: kDarkColorScheme.primaryContainer,
+            foregroundColor: kDarkColorScheme.primary,
+          ),
+        ),
+      ),
       theme: ThemeData().copyWith(
         useMaterial3: true,
         colorScheme: kColorScheme,
@@ -23,19 +45,21 @@ void main() {
             vertical: 6,
           ),
         ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
+        filledButtonTheme: FilledButtonThemeData(
+          style: FilledButton.styleFrom(
             backgroundColor: kColorScheme.primaryContainer,
+            foregroundColor: kColorScheme.primary,
           ),
         ),
         textTheme: ThemeData().textTheme.copyWith(
               titleLarge: TextStyle(
-                fontWeight: FontWeight.normal,
+                fontWeight: FontWeight.bold,
                 color: kColorScheme.onSecondaryContainer,
-                fontSize: 14,
+                fontSize: 16,
               ),
             ),
       ),
+      // themeMode: ThemeMode.system, // default
       home: Expenses(),
       debugShowCheckedModeBanner: false,
     ),
