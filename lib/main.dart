@@ -51,13 +51,13 @@ void main() {
             foregroundColor: kColorScheme.primary,
           ),
         ),
-        textTheme: ThemeData().textTheme.copyWith(
-              titleLarge: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: kColorScheme.onSecondaryContainer,
-                fontSize: 16,
-              ),
-            ),
+        // textTheme: ThemeData().textTheme.copyWith(
+        //       titleLarge: TextStyle(
+        //         fontWeight: FontWeight.bold,
+        //         color: kColorScheme.onSecondaryContainer,
+        //         fontSize: 16,
+        //       ),
+        //     ),
       ),
       // themeMode: ThemeMode.system, // default
       home: Expenses(),
